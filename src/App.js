@@ -1,4 +1,5 @@
-import * as React from 'react';
+import * as React from "react";
+import { useHistory, BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -17,9 +18,9 @@ import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import Alert from '@mui/material/Alert';
-import Dashboard from './Dashboard';
-import Services from './Services';
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Services from "./pages/Services/Services";
+import Reports from "./pages/Reports/Reports";
 
 const drawerWidth = 240;
 
@@ -67,20 +68,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-function renderSwitch(option) {
-  switch (option) {
-    case 0:
-      return <Dashboard />;
-    case 1:
-      return <Services />;
-    case 2:
-      return <Typography paragraph>Maçãs</Typography>;
-    default:
-      return <Alert severity="error">Oops! Something went wrong!</Alert>
-  }
-}
-
-export default function Main() {
+const Layout = ({ children }) => {
+  const history = useHistory()
   const [open, setOpen] = React.useState(true);
   const [selected, setSelected] = React.useState(0);
 
@@ -90,6 +79,20 @@ export default function Main() {
 
   const handleSelectItem = (_, index) => {
     setSelected(index);
+    switch(index) {
+      case 0:
+        history.push("/");
+        break;
+      case 1:
+        history.push("/services");
+        break;
+      case 2:
+        history.push("/reports");
+        break;
+      default:
+        history.push("/");
+        break;
+    }
   }
 
   const mdTheme = createTheme();
@@ -145,19 +148,19 @@ export default function Main() {
           <Divider />
           <List>
             <ListItem button selected={selected === 0} onClick={(event) => handleSelectItem(event, 0)}>
-              <ListItemIcon sx={{pl: "8px"}}>
+              <ListItemIcon sx={{ pl: "8px" }}>
                 <DashboardIcon />
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItem>
             <ListItem button selected={selected === 1} onClick={(event) => handleSelectItem(event, 1)}>
-              <ListItemIcon sx={{pl: "8px"}}>
+              <ListItemIcon sx={{ pl: "8px" }}>
                 <MiscellaneousServicesIcon />
               </ListItemIcon>
               <ListItemText primary="Services" />
             </ListItem>
             <ListItem button selected={selected === 2} onClick={(event) => handleSelectItem(event, 2)}>
-              <ListItemIcon sx={{pl: "8px"}}>
+              <ListItemIcon sx={{ pl: "8px" }}>
                 <BarChartIcon />
               </ListItemIcon>
               <ListItemText primary="Reports" />
@@ -177,9 +180,23 @@ export default function Main() {
           }}
         >
           <Toolbar />
-          {renderSwitch(selected)}
+          {children}
         </Box>
       </Box>
     </ThemeProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Switch>
+        <Layout>
+          <Route exact path="/" component={Dashboard} />
+          <Route path="/services" component={Services} />
+          <Route path="/reports" component={Reports} />
+        </Layout>
+      </Switch>
+    </Router>
   );
 }
