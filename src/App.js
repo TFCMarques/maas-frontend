@@ -20,6 +20,7 @@ import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices
 import BarChartIcon from '@mui/icons-material/BarChart';
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Services from "./pages/Services/Services";
+import ServicePage from "./pages/Services/ServicePage";
 import Reports from "./pages/Reports/Reports";
 
 const drawerWidth = 240;
@@ -194,6 +195,7 @@ export default function App() {
         <Layout>
           <Route exact path="/" component={Dashboard} />
           <Route path="/services" component={Services} />
+          <Route exact path="/services/:id" component={ServicePage} />
           <Route path="/reports" component={Reports} />
         </Layout>
       </Switch>
