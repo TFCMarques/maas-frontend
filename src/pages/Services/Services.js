@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { v4 as uuid } from 'uuid';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Card, Modal, CardActionArea, CardContent, Container, Grid, Typography, Snackbar, Alert } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
@@ -12,7 +13,7 @@ export default function Services() {
   const [openAlert, setOpenAlert] = React.useState(false)
   const [services, setServices] = React.useState([
     {
-      uuid: "asbc-asda-sdadc-rres",
+      uuid: uuid(),
       name: "Strawberry",
       description: "Some strawberries",
       hook: "POST",
@@ -24,13 +25,13 @@ export default function Services() {
   const handleClose = () => setOpen(false)
   const handleAlertClose = () => setOpenAlert(false)
 
-  const createNewService = () => {
+  const createNewService = (name, description, hook, url) => {
     let newService = {
-      uuid: "asbc-asda-sdadc-rres",
-      name: "Strawberry",
-      description: "Some strawberries",
-      hook: "POST",
-      url: "http://nowhere.com"
+      uuid: uuid(),
+      name: name,
+      description: description,
+      hook: hook,
+      url: url
     }
 
     setServices(services => [...services, newService]);

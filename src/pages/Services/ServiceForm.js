@@ -15,15 +15,15 @@ const style = {
 }
 
 export default function ServiceForm(props) {
-  //const [name, setName] = React.useState("")
-  //const [description, setDescription] = React.useState("")
+  const [name, setName] = React.useState("")
+  const [description, setDescription] = React.useState("")
   const [hook, setHook] = React.useState("")
-  //const [url, setUrl] = React.useState("")
+  const [url, setUrl] = React.useState("")
 
   const handleSubmit = (event) => {
     event.preventDefault()
     console.log("Hello World")
-    props.create()
+    props.create(name, description, hook, url)
     props.handler()
   }
 
@@ -48,7 +48,7 @@ export default function ServiceForm(props) {
                 name="serviceName"
                 label="Service Name"
                 variant="filled"
-                onChange={(event) => null}
+                onChange={(event) => setName(event.target.value)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -60,7 +60,7 @@ export default function ServiceForm(props) {
                 multiline
                 rows={4}
                 variant="filled"
-                onChange={(event) => null}
+                onChange={(event) => setDescription(event.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -91,7 +91,7 @@ export default function ServiceForm(props) {
                 label="URL"
                 fullWidth
                 variant="filled"
-                onChange={(event) => null}
+                onChange={(event) => setUrl(event.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm ={3}>

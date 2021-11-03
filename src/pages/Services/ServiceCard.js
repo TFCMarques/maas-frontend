@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card, Grid, Button, CardContent, Typography, CardActions } from "@mui/material";
+import { Card, Grid, Button, Typography, CardContent, CardActions, CardHeader } from "@mui/material";
 import { useHistory } from 'react-router';
 
 export default function ServiceCard(props) {
@@ -11,36 +11,20 @@ export default function ServiceCard(props) {
 
   return (
     <Grid item align="center" xs={12} sm={3}>
-      <Card sx={{ width: 250, height: 300, padding: 3 }}>
-        <Grid container direction="column" spacing={3}>
-          <Grid item align="center" xs={12}>
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              fontWeight="bold"
-            >
-              {props.name}
-            </Typography>
-          </Grid>
-          <Grid item align="center" xs={12}>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-            >
-              ID: {props.uuid}
-            </Typography>
-          </Grid>
-          <Grid item align="center" xs={12}>
-            <Typography
-              variant="body1"
-              fontWeight="bold"
-            >
-              Webhook Verb: {props.hook}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid item align="center">
+      <Card sx={{ width: 250, height: 300, display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }}>
+        <CardHeader 
+          title={props.name}
+          titleTypographyProps={{fontWeight: "bold"}}
+        />
+        <CardContent>
+          <Typography
+            variant="body1"
+            fontWeight="bold"
+          >
+            Webhook Method: {props.hook}
+          </Typography>
+        </CardContent>
+        <CardActions sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <Button
             onClick={handleSelect}
             variant="contained"
@@ -48,7 +32,7 @@ export default function ServiceCard(props) {
           >
             Select
           </Button>
-        </Grid>
+        </CardActions>
       </Card>
     </Grid>
   )

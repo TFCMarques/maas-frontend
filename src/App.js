@@ -71,7 +71,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Layout = ({ children }) => {
   const history = useHistory()
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(0);
 
   const toggleDrawer = () => {
@@ -194,9 +194,11 @@ export default function App() {
       <Switch>
         <Layout>
           <Route exact path="/" component={Dashboard} />
-          <Route path="/services" component={Services} />
-          <Route exact path="/services/:id" component={ServicePage} />
-          <Route path="/reports" component={Reports} />
+
+          <Route exact path="/services" component={Services} />
+          <Route path="/services/:id" component={ServicePage} />
+
+          <Route exact path="/reports" component={Reports} />
         </Layout>
       </Switch>
     </Router>
