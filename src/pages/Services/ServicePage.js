@@ -13,7 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SaveIcon from '@mui/icons-material/Save';
 
-const mdTheme = createTheme()
+const mdTheme = createTheme();
 
 const dummy = {
   uuid: uuid(),
@@ -63,7 +63,7 @@ export default function ServicePage() {
               </Grid>
               <Grid item sx={12} sm={8}>
                 <Grid container spacing={3}>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
                       disabled
                       id="uuid"
@@ -73,6 +73,19 @@ export default function ServicePage() {
                       multiline
                       inputProps={{ readOnly: true }}
                       value={service.uuid}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      disabled={!edit}
+                      id="name"
+                      name="name"
+                      label="Service Name"
+                      fullWidth
+                      multiline
+                      inputProps={{ readOnly: !edit }}
+                      value={service.name}
+                      onChange={handleCHange("name")}
                     />
                   </Grid>
                   <Grid item xs={12}>
