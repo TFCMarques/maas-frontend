@@ -15,6 +15,8 @@ const style = {
 }
 
 export default function ServiceForm(props) {
+  const CHARACTER_LIMIT = 200;
+
   const [name, setName] = React.useState("")
   const [description, setDescription] = React.useState("")
   const [hook, setHook] = React.useState("")
@@ -58,8 +60,11 @@ export default function ServiceForm(props) {
                 label="Description"
                 fullWidth
                 multiline
-                rows={4}
+                rows={3}
                 variant="filled"
+                value={description}
+                inputProps={{ maxLength: CHARACTER_LIMIT }}
+                helperText={`Characters: ${description.length}/${CHARACTER_LIMIT}`}
                 onChange={(event) => setDescription(event.target.value)}
               />
             </Grid>
