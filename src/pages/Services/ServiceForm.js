@@ -24,7 +24,6 @@ export default function ServiceForm(props) {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log("Hello World")
     props.create(name, description, hook, url)
     props.handler()
   }

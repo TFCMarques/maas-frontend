@@ -196,7 +196,7 @@ export default function App() {
           <Route exact path="/" component={Dashboard} />
 
           <Route exact path="/services" component={Services} />
-          <Route path="/services/:id" component={ServicePage} />
+          <Route path="/services/:serviceId" component={ServicePage} />
 
           <Route exact path="/reports" component={Reports} />
         </Layout>

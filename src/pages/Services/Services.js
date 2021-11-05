@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { v4 as uuid } from 'uuid';
+import axios from 'axios';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Card, Modal, CardActionArea, CardContent, Container, Grid, Typography, Snackbar, Alert } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
@@ -9,34 +9,43 @@ import ServiceCard from './ServiceCard';
 const mdTheme = createTheme()
 
 export default function Services() {
+  const API_URL = "http://localhost:5001/maas-31124/us-central1/api"
+
   const [open, setOpen] = React.useState(false)
   const [openAlert, setOpenAlert] = React.useState(false)
-  const [services, setServices] = React.useState([
-    {
-      uuid: uuid(),
-      name: "Strawberry",
-      description: "Some strawberries",
-      hook: "POST",
-      url: "http://nowhere.com"
-    }
-  ])
+  const [services, setServices] = React.useState([])
 
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-  const handleAlertClose = () => setOpenAlert(false)
+  React.useEffect(() => {
+    getAllServices();
+  }, [])
+
+  const getAllServices = () => {
+    axios.get(`${API_URL}/services`).then((response) => {
+      setServices(response.data);
+    }).catch((err) => {
+      console.error(`Error: ${err}`);
+    })
+  }
 
   const createNewService = (name, description, hook, url) => {
     let newService = {
-      uuid: uuid(),
       name: name,
       description: description,
       hook: hook,
       url: url
     }
 
-    setServices(services => [...services, newService]);
-    setOpenAlert(true);
+    axios.post(`${API_URL}/services`, newService).then((response) => {
+      setServices(services => [...services, response.data]);
+      setOpenAlert(true);
+    }).catch((err) => {
+      console.error(`Error: ${err}`);
+    })
   }
+
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+  const handleAlertClose = () => setOpenAlert(false)
 
   return (
     <ThemeProvider theme={mdTheme}>
