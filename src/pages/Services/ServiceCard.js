@@ -21,7 +21,7 @@ export default function ServiceCard(props) {
             variant="body1"
             fontWeight="bold"
           >
-            Webhook Method: {props.hook}
+            HTTP Method: {props.httpMethod}
           </Typography>
         </CardContent>
         <CardActions sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>

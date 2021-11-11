@@ -1,7 +1,10 @@
 import * as React from 'react';
 import axios from 'axios';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Card, Modal, CardActionArea, CardContent, Container, Grid, Typography, Snackbar, Alert } from "@mui/material";
+import {
+  Card, Modal, CardActionArea, CardContent, Container,
+  Grid, Typography, Snackbar, Alert
+} from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import ServiceForm from './ServiceForm';
 import ServiceCard from './ServiceCard';
@@ -27,12 +30,13 @@ export default function Services() {
     })
   }
 
-  const createNewService = (name, description, hook, url) => {
+  const createNewService = (name, description, url, requestBody) => {
     let newService = {
       name: name,
       description: description,
-      hook: hook,
-      url: url
+      url: url,
+      httpMethod: "POST",
+      requestBody: requestBody
     }
 
     axios.post(`${API_URL}/services`, newService).then((response) => {
@@ -53,7 +57,11 @@ export default function Services() {
         <Grid container spacing={5}>
           {services.map((service) => {
             return (
-              <ServiceCard uuid={service.uuid} name={service.name} hook={service.hook} />
+              <ServiceCard
+                key={service.uuid}
+                uuid={service.uuid}
+                name={service.name}
+              />
             )
           })}
           <Grid item align="center" xs={12} sm={3}>
@@ -81,7 +89,7 @@ export default function Services() {
           open={openAlert}
           autoHideDuration={5000}
           onClose={handleAlertClose}
-          anchorOrigin={{vertical: "bottom", horizontal: "left"}}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         >
           <Alert onClose={handleAlertClose} variant="filled" severity="success">
             Successfully created a new Service!
