@@ -36,7 +36,7 @@ export default function ServicePage() {
   const [service, setService] = React.useState({})
   const [lastChange, setLastChange] = React.useState({})
   const [runs, setRuns] = React.useState([])
-  const [alert, setAlert] = React.useState("")
+  const [alert, setAlert] = React.useState({})
 
   const editorStyle = {
     border: 1,
@@ -69,7 +69,7 @@ export default function ServicePage() {
 
   const handleRun = () => {
     axios.post(`${API_URL}/services/${serviceId}/runs`).then((response) => {
-      handleAlertOpen("Successfully run requested service!")
+      handleAlertOpen("Successfully run requested service!", "success")
       handleRefresh()
     }).catch((err) => {
       console.error(`Error: ${err}`);
@@ -81,21 +81,27 @@ export default function ServicePage() {
     setLastChange(service);
   }
 
-  const handleAlertOpen = (alert) => {
-    setAlert(alert);
+  const handleAlertOpen = (message, severity) => {
+    setAlert({message: message, severity: severity});
     setOpenAlert(true);
   }
+
   const handleAlertClose = () => {
     setOpenAlert(false)
   }
 
   const handleSave = () => {
-    axios.put(`${API_URL}/services/${serviceId}`, service).then((response) => {
-      handleAlertOpen("Successfully saved")
+    if(lastChange === service) {
+      handleAlertOpen("No changes to save.", "warning");
       setEdit(false);
-    }).catch((err) => {
-      console.error(`Error: ${err}`);
-    })
+    } else {
+      axios.put(`${API_URL}/services/${serviceId}`, service).then((response) => {
+        handleAlertOpen("Successfully saved changes.", "success")
+        setEdit(false);
+      }).catch((err) => {
+        console.error(`Error: ${err}`);
+      })
+    }
   }
 
   const handleDelete = () => {
@@ -143,7 +149,7 @@ export default function ServicePage() {
           />
           <CardContent sx={{ p: "24px" }}>
             <Grid container spacing={3}>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -152,7 +158,6 @@ export default function ServicePage() {
                       name="uuid"
                       label="UUID"
                       fullWidth
-                      multiline
                       inputProps={{ readOnly: true }}
                       value={service.uuid ? service.uuid : ""}
                     />
@@ -164,7 +169,6 @@ export default function ServicePage() {
                       name="name"
                       label="Service Name"
                       fullWidth
-                      multiline
                       inputProps={{ readOnly: !edit }}
                       value={service.name ? service.name : ""}
                       onChange={handleChange("name")}
@@ -181,45 +185,57 @@ export default function ServicePage() {
                       rows={3}
                       inputProps={{ readOnly: !edit, maxLength: CHARACTER_LIMIT }}
                       helperText={`Characters: ${service.description ? service.description.length : 0}/${CHARACTER_LIMIT}`}
-                      value={service.description ? service.description : "No description"}
+                      value={service.description ? service.description : ""}
                       onChange={handleChange("description")}
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={3}>
+                    <TextField
+                      disabled={true}
+                      id="http-method"
+                      name="http-method"
+                      label="HTTP Method"
+                      fullWidth
+                      inputProps={{ readOnly: true }}
+                      value={"POST"}
+                    />
+                  </Grid>
+                  <Grid item xs={9}>
                     <TextField
                       disabled={!edit}
                       id="url"
                       name="url"
                       label="URL"
                       fullWidth
-                      multiline
                       inputProps={{ readOnly: !edit }}
                       value={service.url ? service.url : ""}
                       onChange={handleChange("url")}
                     />
                   </Grid>
-                  <Grid item xs={12} display="flex" flexDirection="column">
-                    <Typography color={edit ? "black" : "grey.500"} sx={{ ml: "14px", mb: "5px" }}>
-                      Request Body
-                    </Typography>
-                    <Box 
-                      sx={editorStyle}
-                    >
-                      <AceEditor
-                        style={{filter: edit ? "none" : "grayscale(100%) opacity(50%)"}}
-                        height="130px"
-                        width="100%"
-                        mode="json"
-                        theme="tomorrow"
-                        id="request-body"
-                        name="request-body"
-                        label="Request Body"
-                        value={service.requestBody? service.requestBody : "{}"}
-                        onChange={handleRequestBodyChange}
-                        readOnly={!edit}
-                      />
-                    </Box>
-                  </Grid>
+                </Grid>
+              </Grid>
+              <Grid item xs={6}>
+                <Grid item xs={12} display="flex" flexDirection="column">
+                  <Typography color={edit ? "black" : "grey.500"} sx={{ ml: "14px", mb: "5px" }}>
+                    Request Body
+                  </Typography>
+                  <Box
+                    sx={editorStyle}
+                  >
+                    <AceEditor
+                      style={{ filter: edit ? "none" : "grayscale(100%) opacity(50%)" }}
+                      height="253px"
+                      width="100%"
+                      mode="json"
+                      theme="tomorrow"
+                      id="request-body"
+                      name="request-body"
+                      label="Request Body"
+                      value={service.requestBody ? service.requestBody : "{}"}
+                      onChange={handleRequestBodyChange}
+                      readOnly={!edit}
+                    />
+                  </Box>
                 </Grid>
               </Grid>
             </Grid>
@@ -288,8 +304,8 @@ export default function ServicePage() {
           onClose={handleAlertClose}
           anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         >
-          <Alert onClose={handleAlertClose} variant="filled" severity="success">
-            {alert}
+          <Alert onClose={handleAlertClose} variant="filled" severity={alert.severity}>
+            {alert.message}
           </Alert>
         </Snackbar>
       </Container>

@@ -25,6 +25,7 @@ export default function Services() {
   const getAllServices = () => {
     axios.get(`${API_URL}/services`).then((response) => {
       setServices(response.data);
+      console.log(response.data)
     }).catch((err) => {
       console.error(`Error: ${err}`);
     })
@@ -61,6 +62,7 @@ export default function Services() {
                 key={service.uuid}
                 uuid={service.uuid}
                 name={service.name}
+                httpMethod={service.httpMethod}
               />
             )
           })}
