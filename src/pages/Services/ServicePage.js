@@ -68,7 +68,12 @@ export default function ServicePage() {
   }
 
   const handleRun = () => {
+    const start = new Date().toISOString()
     axios.post(`${API_URL}/services/${serviceId}/runs`).then((response) => {
+      console.log({
+        start: start,
+        finish: new Date().toISOString()
+      })
       handleAlertOpen("Successfully run requested service!", "success")
       handleRefresh()
     }).catch((err) => {
@@ -275,7 +280,7 @@ export default function ServicePage() {
             <TableHead>
               <TableRow sx={{ backgroundColor: "primary.main", height: "64px" }}>
                 <TableCell colSpan={4} sx={{ color: "white", fontWeight: "bold", fontSize: "16px", p: "8px 24px" }}>
-                  Service Runs:
+                  {service.name ? service.name : ""} - Service Runs:
                 </TableCell>
                 <TableCell align="right" sx={{ p: "8px 16px" }} colSpan={2}>
                   <IconButton onClick={handleRefresh}>
@@ -286,8 +291,8 @@ export default function ServicePage() {
             </TableHead>
             <TableBody sx={{ '& > *': { borderBottom: 'unset' } }}>
               {runs && runs.length !== 0 ?
-                runs.map((run) => (
-                  <ServiceRun key={run.uuid} run={run} />
+                runs.map((run, index) => (
+                  <ServiceRun key={run.uuid} run={run} index={index}/>
                 )) :
                 <TableRow>
                   <TableCell colSpan={6}>
